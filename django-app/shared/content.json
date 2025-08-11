@@ -1,0 +1,16 @@
+{
+  "name": "Ade Ari",
+  "title": "Full-Stack Engineer",
+  "bio": "Software engineer with experience in Angular, React, Go, Python, backend services, and building config-driven UIs. Passionate about product-driven engineering and mentoring.",
+  "resume": "/shared/assets/resume.pdf",
+  "projects": [
+    {
+      "title": "Kroger Ad Platform",
+      "desc": "Built the ad platform frontend and backend; generated dynamic UIs from JSON; contributed to Go and Python microservices."
+    },
+    {
+      "title": "MongoDB Change Detector",
+      "desc": "Python service for change detection and reliable notifications; implemented distributed locking and duplicate prevention."
+    }
+  ]
+}

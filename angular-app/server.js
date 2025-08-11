@@ -1,0 +1,1 @@
+const express = require('express');const app = express();app.use('/shared', express.static('shared'));app.use(express.static('dist'));app.get('*',(req,res)=>res.sendFile(__dirname+'/dist/index.html'));app.listen(4200,()=>console.log('Angular-like app on 4200'));
