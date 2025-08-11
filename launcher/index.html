@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Ade Ari — Multi-Framework Launcher</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{--nav-h:56px;--accent:#0b5cff}
+    body{margin:0;font-family:inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    header{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fafafa;border-bottom:1px solid #e6e6e6}
+    .brand{font-weight:700}
+    .nav-buttons a{margin-left:8px;padding:8px 12px;border-radius:6px;text-decoration:none;color:#111;background:transparent;border:1px solid transparent}
+    .nav-buttons a.active{background:var(--accent);color:white}
+    .frame-wrap{display:flex;gap:12px;padding:12px}
+    .side{width:260px;min-width:200px}
+    .side .card{background:#fff;border:1px solid #eee;padding:12px;border-radius:8px}
+    .content{flex:1;display:flex;flex-direction:column;height:calc(100vh - var(--nav-h) - 36px)}
+    .iframes{flex:1;border-radius:8px;overflow:hidden;border:1px solid #ddd}
+    iframe{width:100%;height:100%;border:0}
+    .tabs{display:flex;gap:6px;padding:8px;background:#fff;border-bottom:1px solid #eee}
+    .tabs button{padding:8px 12px;border-radius:6px;border:1px solid transparent;background:transparent;cursor:pointer}
+    .tabs button.active{background:var(--accent);color:white}
+    footer{padding:8px 16px;text-align:center;font-size:13px;color:#666}
+    @media (max-width:880px){ .frame-wrap{flex-direction:column} .side{width:100%} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">Ade Ari — Interactive Portfolio (Launcher)</div>
+    <div class="nav-buttons" id="quicklinks">
+      <!-- quicklinks inserted by JS -->
+    </div>
+  </header>
+
+  <div class="frame-wrap">
+    <aside class="side">
+      <div class="card">
+        <h3>About</h3>
+        <p id="bio">Software engineer. Multiple framework demos available. Use the tabs to switch framework views or the top quick links to open in a new tab.</p>
+        <p><a href="/shared/assets/resume.pdf" target="_blank">Open Resume (shared)</a></p>
+        <hr />
+        <h4>How this works</h4>
+        <ol>
+          <li>Start your apps on the ports noted in the README (or use the Docker Compose that includes an <code>nginx</code> reverse proxy).</li>
+          <li>The launcher loads each app through an iframe at path <code>/react/</code>, <code>/angular/</code>, <code>/vue/</code>, <code>/flask/</code>, <code>/django/</code>.</li>
+          <li>nginx proxies those paths to the backend dev servers (ports) and sets headers to allow same-origin framing so the iframe works.</li>
+        </ol>
+        <p style="font-size:13px;color:#444">Tip: Using the nginx proxy makes embedding simple — you don't need to change each dev server's headers.</p>
+      </div>
+      <div style="height:12px"></div>
+      <div class="card" id="instructions">
+        <h4>Local ports</h4>
+        <ul>
+          <li>React: <code>/react/ → localhost:3001</code></li>
+          <li>Angular: <code>/angular/ → localhost:3002</code></li>
+          <li>Vue: <code>/vue/ → localhost:3003</code></li>
+          <li>Flask: <code>/flask/ → localhost:5001</code></li>
+          <li>Django: <code>/django/ → localhost:8001</code></li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="tabs" id="tabs">
+        <!-- buttons inserted by JS -->
+      </div>
+      <div class="iframes" id="frameContainer">
+        <!-- iframe inserted by JS -->
+      </div>
+      <footer>Launcher — if an app doesn't appear, confirm the target app is running on the port listed in the README and that nginx proxy is started.</footer>
+    </section>
+  </div>
+
+<script>
+const apps = [
+  { id: 'react', name: 'React', path: '/react/' },
+  { id: 'angular', name: 'Angular', path: '/angular/' },
+  { id: 'vue', name: 'Vue', path: '/vue/' },
+  { id: 'flask', name: 'Flask', path: '/flask/' },
+  { id: 'django', name: 'Django', path: '/django/' }
+];
+
+const tabs = document.getElementById('tabs');
+const frameContainer = document.getElementById('frameContainer');
+const quicklinks = document.getElementById('quicklinks');
+
+function makeButton(app){
+  const btn = document.createElement('button');
+  btn.innerText = app.name;
+  btn.onclick = () => activate(app.id);
+  btn.id = 'tab-' + app.id;
+  return btn;
+}
+
+function makeQuickLink(app){
+  const a = document.createElement('a');
+  a.href = app.path;
+  a.target = '_blank';
+  a.innerText = app.name;
+  return a;
+}
+
+apps.forEach(app=>{
+  tabs.appendChild(makeButton(app));
+  quicklinks.appendChild(makeQuickLink(app));
+});
+
+let active = apps[0].id;
+function activate(id){
+  active = id;
+  // highlight tabs
+  apps.forEach(a=>{
+    const btn = document.getElementById('tab-'+a.id);
+    if(a.id===id) btn.classList.add('active'); else btn.classList.remove('active');
+  });
+  // swap iframe
+  frameContainer.innerHTML = '';
+  const iframe = document.createElement('iframe');
+  const app = apps.find(x=>x.id===id);
+  iframe.src = app.path;
+  iframe.title = app.name + ' view';
+  frameContainer.appendChild(iframe);
+}
+
+// initialize
+activate(active);
+</script>
+</body>
+</html>

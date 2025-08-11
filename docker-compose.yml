@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: mf_launcher_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./launcher:/usr/share/launcher:ro
+    depends_on:
+      - react
+      - angular
+      - vue
+      - flask
+      - django
+
+  # The following services are placeholders useful for a demo or local run.
+  # If you already have your own app services, either remove these placeholders
+  # or map their ports to match your running apps.
+  react:
+    image: ghcr.io/coder/example-static:latest
+    container_name: mf_react_placeholder
+    expose:
+      - "3000"
+    # This placeholder serves at port 3000; replace with your React service in compose or run your React app on port 3001 and edit nginx accordingly
+
+  angular:
+    image: ghcr.io/coder/example-static:latest
+    container_name: mf_angular_placeholder
+    expose:
+      - "4200"
+
+  vue:
+    image: ghcr.io/coder/example-static:latest
+    container_name: mf_vue_placeholder
+    expose:
+      - "5173"
+
+  flask:
+    image: ghcr.io/coder/example-static:latest
+    container_name: mf_flask_placeholder
+    expose:
+      - "5000"
+
+  django:
+    image: ghcr.io/coder/example-static:latest
+    container_name: mf_django_placeholder
+    expose:
+      - "8000"
+
+# Notes:
+# - The compose file uses placeholder static containers so the launcher can show something out-of-the-box.
+# - Replace the placeholder services with your real per-framework services or modify ports/names accordingly.
