@@ -188,9 +188,11 @@
 
         iframe {
             width: 100%;
-            height: 70vh;
+            height: 80vh;
+            min-height: 600px;
             border: none;
             display: block;
+            background: white;
         }
 
         .loading {
@@ -222,7 +224,8 @@
             }
 
             iframe {
-                height: 60vh;
+                height: 70vh;
+                min-height: 500px;
             }
         }
 
@@ -358,6 +361,11 @@
             // Hide loading after iframe loads
             iframe.onload = function() {
                 loading.classList.remove('show');
+            };
+
+            // Handle iframe errors
+            iframe.onerror = function() {
+                loading.innerHTML = `<p style="color: #dc3545;">Failed to load ${name} framework. Please try again.</p>`;
             };
 
             // Smooth scroll to top

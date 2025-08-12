@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import content from '../shared/content.json';
+import content from './content.js';
 
 const symbols = ['🍕', '🚀', '🎧', '🐱', '🎲', '💡'];
 

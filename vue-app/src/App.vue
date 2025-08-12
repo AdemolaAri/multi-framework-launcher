@@ -73,7 +73,7 @@
 
 <script>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import content from '../shared/content.json'
+import content from './content.js'
 
 export default {
   name: 'App',

@@ -1,5 +1,6 @@
-import content from '../shared/content.json';
+import content from './content.js';
 import MemoryGame from './MemoryGame';
+import './styles.css';
 
 export default function App() {
   return (
