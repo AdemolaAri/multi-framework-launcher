@@ -1,8 +1,445 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Launcher</title>
-<style>body{font-family:Arial;margin:0}header{padding:12px;background:#111;color:#fff}nav a{color:#fff;margin-right:8px}iframe{width:100%;height:calc(100vh-56px);border:0}</style>
-</head><body><header><strong>Ade Ari — Launcher</strong> — <a href="/shared/assets/resume.pdf" style="color:#9cf">Resume</a></header>
-<nav style="padding:8px;background:#f6f6f6"><button onclick="go('/react/')">React</button><button onclick="go('/angular/')">Angular</button><button onclick="go('/vue/')">Vue</button><button onclick="go('/flask/')">Flask</button><button onclick="go('/django/')">Django</button></nav>
-<div id="frame"><iframe src="/react/"></iframe></div>
-<script>function go(p){document.querySelector('#frame iframe').src=p}</script>
-</body></html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Ade Ari - Portfolio Launcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .resume-link {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .resume-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .frameworks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .framework-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .framework-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .framework-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .framework-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .framework-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .react-icon { background: #61dafb; color: #000; }
+        .vue-icon { background: #4fc08d; }
+        .angular-icon { background: #dd0031; }
+        .flask-icon { background: #000; }
+        .django-icon { background: #092e20; }
+
+        .framework-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .game-info {
+            margin-bottom: 15px;
+        }
+
+        .game-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .game-description {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .skill-connection {
+            background: #f8f9ff;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            font-size: 0.9rem;
+            color: #555;
+            font-style: italic;
+        }
+
+        .current-view {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .current-view-header {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .current-framework {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        iframe {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .frameworks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .framework-card {
+                padding: 20px;
+            }
+
+            iframe {
+                height: 60vh;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ade Ari</h1>
+            <p>Full-Stack Engineer Portfolio</p>
+            <a href="/shared/assets/resume.pdf" class="resume-link" target="_blank">📄 View Resume</a>
+        </header>
+
+        <div id="launcher-view">
+            <div class="frameworks-grid">
+                <div class="framework-card" onclick="loadFramework('/react/', 'React')">
+                    <div class="framework-header">
+                        <div class="framework-icon react-icon">⚛️</div>
+                        <div class="framework-title">React</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">Memory Challenge</div>
+                        <div class="game-description">Test your memory skills with this card matching game - showcasing the attention to detail that drives my engineering approach.</div>
+                    </div>
+                    <div class="skill-connection">
+                        Just like debugging complex systems, this game requires focus, pattern recognition, and methodical thinking.
+                    </div>
+                </div>
+
+                <div class="framework-card" onclick="loadFramework('/vue/', 'Vue')">
+                    <div class="framework-header">
+                        <div class="framework-icon vue-icon">🟢</div>
+                        <div class="framework-title">Vue</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">Puzzle Master</div>
+                        <div class="game-description">Solve the sliding puzzle by rearranging pieces - reflecting my problem-solving methodology in software architecture.</div>
+                    </div>
+                    <div class="skill-connection">
+                        Breaking down complex problems into manageable pieces is key to both puzzle-solving and system design.
+                    </div>
+                </div>
+
+                <div class="framework-card" onclick="loadFramework('/angular/', 'Angular')">
+                    <div class="framework-header">
+                        <div class="framework-icon angular-icon">🅰️</div>
+                        <div class="framework-title">Angular</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">Code Typer</div>
+                        <div class="game-description">Demonstrate your typing speed with tech terms and code snippets - highlighting the technical proficiency behind clean code.</div>
+                    </div>
+                    <div class="skill-connection">
+                        Fast, accurate coding comes from muscle memory and deep familiarity with programming concepts.
+                    </div>
+                </div>
+
+                <div class="framework-card" onclick="loadFramework('/flask/', 'Flask')">
+                    <div class="framework-header">
+                        <div class="framework-icon flask-icon">🌶️</div>
+                        <div class="framework-title">Flask</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">Tech Trivia</div>
+                        <div class="game-description">Challenge your knowledge of technologies and concepts - showcasing the breadth of my technical expertise.</div>
+                    </div>
+                    <div class="skill-connection">
+                        Continuous learning and staying current with technology trends is essential for effective engineering leadership.
+                    </div>
+                </div>
+
+                <div class="framework-card" onclick="loadFramework('/django/', 'Django')">
+                    <div class="framework-header">
+                        <div class="framework-icon django-icon">🎯</div>
+                        <div class="framework-title">Django</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">Word Connect</div>
+                        <div class="game-description">Associate technical concepts and terms - demonstrating the communication skills vital for mentoring and collaboration.</div>
+                    </div>
+                    <div class="skill-connection">
+                        Clear technical communication and the ability to connect concepts across domains enables effective team collaboration.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="framework-view" style="display: none;">
+            <div class="current-view">
+                <div class="current-view-header">
+                    <div class="current-framework" id="current-framework-name">React Portfolio</div>
+                    <button class="back-button" onclick="showLauncher()">← Back to Launcher</button>
+                </div>
+                <div class="loading" id="loading">Loading framework...</div>
+                <iframe id="framework-iframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFramework = null;
+
+        function loadFramework(path, name) {
+            const launcherView = document.getElementById('launcher-view');
+            const frameworkView = document.getElementById('framework-view');
+            const iframe = document.getElementById('framework-iframe');
+            const frameworkName = document.getElementById('current-framework-name');
+            const loading = document.getElementById('loading');
+
+            // Show loading state
+            loading.classList.add('show');
+            
+            // Update framework name
+            frameworkName.textContent = `${name} Portfolio`;
+            
+            // Hide launcher and show framework view
+            launcherView.style.display = 'none';
+            frameworkView.style.display = 'block';
+            frameworkView.classList.add('fade-in');
+            
+            // Load the framework
+            iframe.src = path;
+            currentFramework = { path, name };
+
+            // Hide loading after iframe loads
+            iframe.onload = function() {
+                loading.classList.remove('show');
+            };
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showLauncher() {
+            const launcherView = document.getElementById('launcher-view');
+            const frameworkView = document.getElementById('framework-view');
+            const iframe = document.getElementById('framework-iframe');
+
+            // Clear iframe
+            iframe.src = '';
+            
+            // Show launcher and hide framework view
+            frameworkView.style.display = 'none';
+            launcherView.style.display = 'block';
+            launcherView.classList.add('fade-in');
+            
+            currentFramework = null;
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Handle browser back button
+        window.addEventListener('popstate', function(event) {
+            if (currentFramework && !event.state) {
+                showLauncher();
+            }
+        });
+
+        // Add state to history when loading framework
+        function loadFramework(path, name) {
+            const launcherView = document.getElementById('launcher-view');
+            const frameworkView = document.getElementById('framework-view');
+            const iframe = document.getElementById('framework-iframe');
+            const frameworkName = document.getElementById('current-framework-name');
+            const loading = document.getElementById('loading');
+
+            // Show loading state
+            loading.classList.add('show');
+            
+            // Update framework name
+            frameworkName.textContent = `${name} Portfolio`;
+            
+            // Hide launcher and show framework view
+            launcherView.style.display = 'none';
+            frameworkView.style.display = 'block';
+            frameworkView.classList.add('fade-in');
+            
+            // Load the framework
+            iframe.src = path;
+            currentFramework = { path, name };
+
+            // Add to browser history
+            history.pushState({ framework: name, path: path }, `${name} Portfolio`, `#${name.toLowerCase()}`);
+
+            // Hide loading after iframe loads
+            iframe.onload = function() {
+                loading.classList.remove('show');
+            };
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize with React if hash is present
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.substring(1);
+            const frameworks = {
+                'react': { path: '/react/', name: 'React' },
+                'vue': { path: '/vue/', name: 'Vue' },
+                'angular': { path: '/angular/', name: 'Angular' },
+                'flask': { path: '/flask/', name: 'Flask' },
+                'django': { path: '/django/', name: 'Django' }
+            };
+
+            if (hash && frameworks[hash]) {
+                loadFramework(frameworks[hash].path, frameworks[hash].name);
+            }
+        });
+    </script>
+</body>
+</html>
