@@ -1,3 +1,14 @@
 node_modules/
 yarn.lock
 .kiro
+dist/
+build/
+coverage/
+.env
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.swp
+*.swo
+*.bak
