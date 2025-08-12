@@ -1,1 +1,455 @@
-<!doctype html><html><head><meta charset="utf-8"/><title>Django App</title></head><body><h1>{{content.name}} — {{content.title}}</h1><img src="/shared/assets/avatar.jpg" width="120"/><p>{{content.bio}}</p><h2>Code Puzzle</h2><p>What is output of <code>print(sum([i for i in range(3)]))</code> ?</p><input id="ans"/><button onclick="check()">Submit</button><div id="res"></div><script>function check(){if(document.getElementById('ans').value==='3')document.getElementById('res').innerText='Correct!' ; else document.getElementById('res').innerText='Try again.'}</script></body></html>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{content.name}} - Django Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            margin-bottom: 15px;
+        }
+        .game-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        .game-title {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .game-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .game-interface {
+            display: none;
+        }
+        .game-interface.active {
+            display: block;
+        }
+        .term-display {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .response-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .response-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .timer {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 18px;
+        }
+        .progress {
+            color: #666;
+            font-size: 14px;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.positive {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .feedback.neutral {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .feedback.negative {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .game-results {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .game-results.show {
+            display: block;
+        }
+        .final-score {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .skill-connection {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #17a2b8;
+            font-style: italic;
+        }
+        .projects {
+            margin-top: 30px;
+        }
+        .project {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        .project h3 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            .game-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/shared/assets/avatar.jpg" alt="{{content.name}}" class="avatar"/>
+            <h1>{{content.name}} — {{content.title}}</h1>
+            <p>{{content.bio}}</p>
+        </div>
+
+        <div class="game-section">
+            <h2 class="game-title">
+                🧠 {{content.games.django.title}}
+            </h2>
+            <p class="game-description">{{content.games.django.description}}</p>
+            
+            <div id="game-start">
+                <button class="btn" onclick="startGame()">Start Word Association Challenge</button>
+            </div>
+
+            <div id="game-interface" class="game-interface">
+                <div class="game-controls">
+                    <span id="progress" class="progress"></span>
+                    <span id="timer" class="timer">30s</span>
+                </div>
+                
+                <div id="term-display" class="term-display"></div>
+                
+                <input type="text" id="response-input" class="response-input" 
+                       placeholder="Enter words or concepts you associate with this term..." 
+                       maxlength="200">
+                
+                <div class="game-controls">
+                    <button class="btn" onclick="submitResponse()" id="submit-btn">Submit Response</button>
+                    <button class="btn" onclick="skipTerm()" id="skip-btn">Skip</button>
+                </div>
+
+                <div id="feedback" class="feedback"></div>
+            </div>
+
+            <div id="game-results" class="game-results">
+                <h3>Game Complete!</h3>
+                <div id="final-score" class="final-score"></div>
+                <div id="results-summary"></div>
+                <button class="btn" onclick="resetGame()">Play Again</button>
+            </div>
+
+            <div class="skill-connection">
+                <strong>💡 Skill Connection:</strong> {{content.games.django.skillConnection}}
+            </div>
+        </div>
+
+        <div class="projects">
+            <h2>Featured Projects</h2>
+            {% for project in content.projects %}
+            <div class="project">
+                <h3>{{project.title}}</h3>
+                <p>{{project.desc}}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{content.resume}}" target="_blank" class="btn">View Resume</a>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            currentTerm: null,
+            timeLeft: 30,
+            timer: null,
+            termNumber: 0,
+            totalTerms: 0
+        };
+
+        function startGame() {
+            fetch('/game/start/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    gameState.currentTerm = data.current_term;
+                    gameState.termNumber = data.term_number;
+                    gameState.totalTerms = data.total_terms;
+                    
+                    document.getElementById('game-start').style.display = 'none';
+                    document.getElementById('game-interface').classList.add('active');
+                    document.getElementById('game-results').classList.remove('show');
+                    
+                    displayCurrentTerm();
+                    startTimer();
+                } else {
+                    alert('Failed to start game: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to start game');
+            });
+        }
+
+        function displayCurrentTerm() {
+            document.getElementById('term-display').textContent = gameState.currentTerm.term;
+            document.getElementById('progress').textContent = 
+                `Term ${gameState.termNumber} of ${gameState.totalTerms} (${gameState.currentTerm.category})`;
+            document.getElementById('response-input').value = '';
+            document.getElementById('response-input').focus();
+            hideFeedback();
+        }
+
+        function startTimer() {
+            gameState.timeLeft = 30;
+            updateTimerDisplay();
+            
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                updateTimerDisplay();
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    submitResponse();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timer');
+            timerEl.textContent = gameState.timeLeft + 's';
+            
+            if (gameState.timeLeft <= 10) {
+                timerEl.style.color = '#dc3545';
+            } else {
+                timerEl.style.color = '#667eea';
+            }
+        }
+
+        function submitResponse() {
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            
+            const response = document.getElementById('response-input').value.trim();
+            
+            fetch('/game/submit/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    response: response
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showFeedback(data.feedback, data.score);
+                    
+                    if (data.game_complete) {
+                        setTimeout(() => {
+                            showGameResults(data);
+                        }, 2000);
+                    } else {
+                        gameState.currentTerm = data.next_term;
+                        gameState.termNumber = data.term_number;
+                        
+                        setTimeout(() => {
+                            displayCurrentTerm();
+                            startTimer();
+                        }, 2000);
+                    }
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to submit response');
+            });
+        }
+
+        function skipTerm() {
+            document.getElementById('response-input').value = '';
+            submitResponse();
+        }
+
+        function showFeedback(message, score) {
+            const feedbackEl = document.getElementById('feedback');
+            feedbackEl.textContent = message + ` (Score: ${score}/100)`;
+            
+            if (score >= 70) {
+                feedbackEl.className = 'feedback show positive';
+            } else if (score >= 40) {
+                feedbackEl.className = 'feedback show neutral';
+            } else {
+                feedbackEl.className = 'feedback show negative';
+            }
+        }
+
+        function hideFeedback() {
+            document.getElementById('feedback').classList.remove('show');
+        }
+
+        function showGameResults(data) {
+            document.getElementById('game-interface').classList.remove('active');
+            
+            const resultsEl = document.getElementById('game-results');
+            const scoreEl = document.getElementById('final-score');
+            const summaryEl = document.getElementById('results-summary');
+            
+            scoreEl.textContent = `${data.average_score}/100`;
+            
+            let performanceMessage = '';
+            if (data.average_score >= 80) {
+                performanceMessage = 'Outstanding! Your technical vocabulary demonstrates deep expertise across multiple domains.';
+            } else if (data.average_score >= 60) {
+                performanceMessage = 'Great job! You show solid understanding of technical concepts and their relationships.';
+            } else if (data.average_score >= 40) {
+                performanceMessage = 'Good effort! You have a foundation in technical concepts with room to expand your vocabulary.';
+            } else {
+                performanceMessage = 'Keep learning! Technical vocabulary grows with experience and continuous exploration.';
+            }
+            
+            summaryEl.innerHTML = `
+                <p>${performanceMessage}</p>
+                <p><strong>Total Score:</strong> ${data.total_score}/${data.total_terms * 100}</p>
+                <p><strong>Terms Completed:</strong> ${data.total_terms}</p>
+            `;
+            
+            resultsEl.classList.add('show');
+        }
+
+        function resetGame() {
+            document.getElementById('game-start').style.display = 'block';
+            document.getElementById('game-interface').classList.remove('active');
+            document.getElementById('game-results').classList.remove('show');
+            
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            
+            gameState = {
+                currentTerm: null,
+                timeLeft: 30,
+                timer: null,
+                termNumber: 0,
+                totalTerms: 0
+            };
+        }
+
+        // Allow Enter key to submit response
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('response-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitResponse();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
