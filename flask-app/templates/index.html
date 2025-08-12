@@ -1,1 +1,327 @@
-<!doctype html><html><head><meta charset="utf-8"/><title>Flask App</title></head><body><h1>{{content.name}} — {{content.title}}</h1><img src="/shared/assets/avatar.jpg" width="120"/><p>{{content.bio}}</p><h2>Quiz</h2><form id="quiz"><div>1)<label><input type="radio" name="q1" value="A">Python</label><label><input type="radio" name="q1" value="B">Ruby</label></div><div>2)<label><input type="radio" name="q2" value="B">MongoDB</label><label><input type="radio" name="q2" value="A">MySQL</label></div><div>3)<label><input type="radio" name="q3" value="C">Angular</label><label><input type="radio" name="q3" value="D">Ember</label></div><button type="button" onclick="submitQuiz()">Submit</button></form><div id="res"></div><script>async function submitQuiz(){const obj={};new FormData(document.getElementById('quiz')).forEach((v,k)=>obj[k]=v);const r=await fetch('/quiz/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)});const j=await r.json();document.getElementById('res').innerText='Score: '+j.score}</script></body></html>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{content.name}} - Flask Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            margin-bottom: 15px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        .bio {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        .game-section {
+            margin-top: 30px;
+        }
+        .game-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .game-title {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .game-description {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .question {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+        .question:hover {
+            border-color: #667eea;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background: #e3f2fd;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: block;
+            margin: 30px auto;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        .score-display {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .feedback {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+        }
+        .result-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+        }
+        .result-item.correct {
+            background: #e8f5e8;
+            border-left-color: #4caf50;
+        }
+        .result-item.incorrect {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .result-answers {
+            margin-bottom: 8px;
+        }
+        .result-explanation {
+            font-style: italic;
+            color: #666;
+        }
+        .category-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .loading {
+            text-align: center;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/shared/assets/avatar.jpg" alt="{{content.name}}" class="avatar"/>
+            <h1>{{content.name}} — {{content.title}}</h1>
+        </div>
+        
+        <div class="bio">
+            <p>{{content.bio}}</p>
+        </div>
+
+        <div class="game-section">
+            <div class="game-header">
+                <h2 class="game-title">{{content.games.flask.title}}</h2>
+                <p class="game-description">{{content.games.flask.description}}</p>
+                <p><em>{{content.games.flask.skillConnection}}</em></p>
+            </div>
+
+            <form id="triviaForm">
+                {% for question in questions %}
+                <div class="question">
+                    <div class="question-text">
+                        {{loop.index}}. {{question.question}}
+                    </div>
+                    <div class="options">
+                        {% for option in question.options %}
+                        <label class="option">
+                            <input type="radio" name="{{question.id}}" value="{{option}}">
+                            {{option}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <span class="category-tag">{{question.category}}</span>
+                </div>
+                {% endfor %}
+                
+                <button type="button" class="submit-btn" onclick="submitTrivia()">
+                    Submit Trivia
+                </button>
+            </form>
+
+            <div id="results" class="results">
+                <div id="loading" class="loading" style="display: none;">
+                    Calculating your score...
+                </div>
+                <div id="scoreDisplay" class="score-display"></div>
+                <div id="feedback" class="feedback"></div>
+                <div id="detailedResults"></div>
+                <button type="button" class="submit-btn" onclick="resetTrivia()" style="margin-top: 20px;">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function submitTrivia() {
+            const form = document.getElementById('triviaForm');
+            const submitBtn = document.querySelector('.submit-btn');
+            const results = document.getElementById('results');
+            const loading = document.getElementById('loading');
+            
+            // Collect answers
+            const answers = {};
+            const formData = new FormData(form);
+            for (let [key, value] of formData.entries()) {
+                answers[key] = value;
+            }
+            
+            // Validate that all questions are answered
+            const totalQuestions = {{questions|length}};
+            if (Object.keys(answers).length < totalQuestions) {
+                alert('Please answer all questions before submitting.');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            results.style.display = 'block';
+            loading.style.display = 'block';
+            
+            try {
+                const response = await fetch('/trivia/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ answers: answers })
+                });
+                
+                const result = await response.json();
+                displayResults(result);
+                
+            } catch (error) {
+                console.error('Error submitting trivia:', error);
+                alert('Error submitting trivia. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+                submitBtn.style.display = 'none';
+            }
+        }
+        
+        function displayResults(result) {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const feedback = document.getElementById('feedback');
+            const detailedResults = document.getElementById('detailedResults');
+            
+            // Display score
+            scoreDisplay.innerHTML = `
+                <strong>Your Score: ${result.score}/${result.total} (${result.percentage}%)</strong>
+            `;
+            
+            // Display feedback
+            feedback.innerHTML = result.feedback;
+            
+            // Display detailed results
+            let detailedHTML = '<h3>Detailed Results:</h3>';
+            result.results.forEach((item, index) => {
+                const correctClass = item.is_correct ? 'correct' : 'incorrect';
+                const icon = item.is_correct ? '✓' : '✗';
+                
+                detailedHTML += `
+                    <div class="result-item ${correctClass}">
+                        <div class="result-question">
+                            ${icon} ${item.question}
+                        </div>
+                        <div class="result-answers">
+                            <strong>Your answer:</strong> ${item.user_answer}<br>
+                            <strong>Correct answer:</strong> ${item.correct_answer}
+                        </div>
+                        <div class="result-explanation">
+                            ${item.explanation}
+                        </div>
+                        <span class="category-tag">${item.category}</span>
+                    </div>
+                `;
+            });
+            
+            detailedResults.innerHTML = detailedHTML;
+        }
+        
+        function resetTrivia() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
