@@ -78,6 +78,68 @@ section p {
   font-size: 1.1rem;
 }
 
+/* Navigation styles */
+.container header nav {
+  display: flex;
+  gap: 15px;
+}
+
+.container header nav a {
+  background: #3498db;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.container header nav a:hover {
+  background: #2980b9;
+}
+
+/* Game description */
+.game-description {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+/* Skill connection */
+.skill-connection {
+  background: #e8f4f8;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border-left: 4px solid #17a2b8;
+  font-style: italic;
+}
+
+/* Projects section */
+.projects-section h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.project {
+  background: #f8f9fa;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+.project h3 {
+  margin: 0 0 10px 0;
+  color: #667eea;
+}
+
+.project p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
 /* Memory Game Styles */
 .memory-game {
   max-width: 500px;

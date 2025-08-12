@@ -4,13 +4,15 @@
       <h1>{{ content.name }} — {{ content.title }}</h1>
       <nav>
         <a href="/">← Back to Launcher</a>
+        <a :href="content.resume" target="_blank">View Resume</a>
       </nav>
     </header>
     
     <main>
-      <section>
+      <section class="profile-section">
         <img src="/shared/assets/avatar.jpg" width="120" alt="Profile Avatar"/>
         <p>{{ content.bio }}</p>
+        <a :href="content.resume" target="_blank" class="resume-link">View Resume</a>
       </section>
 
       <section>
@@ -55,6 +57,14 @@
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="projects-section">
+        <h2>Featured Projects</h2>
+        <div v-for="(project, index) in content.projects" :key="index" class="project">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.desc }}</p>
         </div>
       </section>
     </main>
@@ -247,6 +257,11 @@ body {
   font-weight: 600;
 }
 
+.container header nav {
+  display: flex;
+  gap: 15px;
+}
+
 .container header nav a {
   background: #3498db;
   color: white;
@@ -290,6 +305,48 @@ section p {
   line-height: 1.6;
   color: #555;
   font-size: 1.1rem;
+}
+
+/* Resume link */
+.resume-link {
+  display: inline-block;
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+}
+
+.resume-link:hover {
+  background: #218838;
+}
+
+/* Projects section */
+.projects-section h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.project {
+  background: #f8f9fa;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+.project h3 {
+  margin: 0 0 10px 0;
+  color: #667eea;
+}
+
+.project p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
 }
 
 /* Puzzle Game Styles */

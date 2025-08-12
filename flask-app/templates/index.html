@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{content.name}} - Flask Portfolio</title>
+    <title>Ade Ari - Flask Portfolio</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -175,10 +175,27 @@
             text-align: center;
             color: #667eea;
         }
+        .projects {
+            margin-top: 30px;
+        }
+        .project {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        .project h3 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div style="text-align: right; margin-bottom: 20px;">
+            <a href="/" style="background: #3498db; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-weight: 500;">← Back to Launcher</a>
+        </div>
         <div class="header">
             <img src="/shared/assets/avatar.jpg" alt="{{content.name}}" class="avatar"/>
             <h1>{{content.name}} — {{content.title}}</h1>
@@ -229,6 +246,20 @@
                     Try Again
                 </button>
             </div>
+        </div>
+
+        <div class="projects">
+            <h2>Featured Projects</h2>
+            {% for project in content.projects %}
+            <div class="project">
+                <h3>{{project.title}}</h3>
+                <p>{{project.desc}}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{content.resume}}" target="_blank" class="btn">View Resume</a>
         </div>
     </div>
 
