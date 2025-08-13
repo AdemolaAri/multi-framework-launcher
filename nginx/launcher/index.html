@@ -333,10 +333,15 @@
         </div>
     </div>
 
+    <script src="deployment-config.js"></script>
     <script>
         let currentFramework = null;
 
         function loadFramework(path, name) {
+            // Use configured URL instead of relative path
+            const config = window.PORTFOLIO_CONFIG || {};
+            const frameworkKey = name.toLowerCase();
+            const actualPath = config[frameworkKey] || path;
             const launcherView = document.getElementById('launcher-view');
             const frameworkView = document.getElementById('framework-view');
             const iframe = document.getElementById('framework-iframe');
@@ -355,8 +360,8 @@
             frameworkView.classList.add('fade-in');
             
             // Load the framework
-            iframe.src = path;
-            currentFramework = { path, name };
+            iframe.src = actualPath;
+            currentFramework = { path: actualPath, name };
 
             // Hide loading after iframe loads
             iframe.onload = function() {

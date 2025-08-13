@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hybrid Deployment Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>Hybrid Deployment Test</h1>
+    <p>This page tests if your hybrid deployment configuration is working correctly.</p>
+    
+    <div id="results"></div>
+    
+    <script src="deployment-config.js"></script>
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        // Test configuration loading
+        if (window.PORTFOLIO_CONFIG) {
+            addResult('✅ Configuration loaded successfully', 'success');
+            
+            // Display current configuration
+            const config = window.PORTFOLIO_CONFIG;
+            addResult(`Current environment detected: ${window.location.hostname}`, 'info');
+            
+            Object.entries(config).forEach(([key, url]) => {
+                addResult(`${key}: ${url}`, 'info');
+            });
+            
+            // Test URL accessibility (basic check)
+            Object.entries(config).forEach(([key, url]) => {
+                if (url.startsWith('http')) {
+                    // External URL - test with fetch (may be blocked by CORS)
+                    fetch(url, { mode: 'no-cors' })
+                        .then(() => addResult(`✅ ${key} URL appears accessible: ${url}`, 'success'))
+                        .catch(() => addResult(`⚠️ ${key} URL may not be accessible: ${url}`, 'error'));
+                } else {
+                    addResult(`📁 ${key} uses relative path: ${url}`, 'info');
+                }
+            });
+            
+        } else {
+            addResult('❌ Configuration failed to load', 'error');
+        }
+    </script>
+</body>
+</html>

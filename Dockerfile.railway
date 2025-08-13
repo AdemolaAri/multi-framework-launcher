@@ -1,0 +1,12 @@
+# Multi-stage build for Railway deployment
+FROM docker/compose:latest
+
+WORKDIR /app
+COPY . .
+
+# Install docker-compose if not available
+RUN apk add --no-cache docker-compose
+
+EXPOSE 8080
+
+CMD ["docker-compose", "up", "--build"]
