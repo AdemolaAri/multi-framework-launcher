@@ -3,19 +3,11 @@ import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
   plugins: [vue()],
-  base: "/vue/",
-  server: {
-    host: "0.0.0.0",
-    port: 5173,
-    strictPort: true,
-    headers: {
-      "X-Frame-Options": "SAMEORIGIN",
-      "Access-Control-Allow-Origin": "*",
-    },
-    cors: true,
-  },
+  base: "./",
   build: {
     outDir: "dist",
     assetsDir: "assets",
-  },
+    sourcemap: false,
+    minify: true  // Using default esbuild minifier
+  }
 });

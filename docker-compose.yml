@@ -13,7 +13,7 @@ services:
   react:
     build: ./react-app
     expose:
-      - "3000"
+      - "80"
 
   angular:
     build: ./angular-app
@@ -23,7 +23,7 @@ services:
   vue:
     build: ./vue-app
     expose:
-      - "5173"
+      - "80"
 
   flask:
     build: ./flask-app
