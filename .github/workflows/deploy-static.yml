@@ -5,55 +5,70 @@ permissions:
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: true
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
 
-    - name: Install React dependencies
-      working-directory: ./react-app
-      run: yarn install
+      - name: Install React dependencies
+        working-directory: ./react-app
+        run: yarn install
 
-    - name: Build React app
-      working-directory: ./react-app
-      run: yarn build
+      - name: Build React app
+        working-directory: ./react-app
+        run: yarn build
 
-    - name: Install Vue dependencies
-      working-directory: ./vue-app
-      run: yarn install
+      - name: Install Vue dependencies
+        working-directory: ./vue-app
+        run: yarn install
 
-    - name: Build Vue app
-      working-directory: ./vue-app
-      run: yarn build
+      - name: Build Vue app
+        working-directory: ./vue-app
+        run: yarn build
 
-    - name: Prepare deployment
-      run: |
-        mkdir -p deploy/static
-        cp -r react-app/dist deploy/static/react
-        cp -r vue-app/dist deploy/static/vue
-        cp -r angular-app/dist deploy/static/angular
-        cp -r nginx/launcher/* deploy/static/
-        cp -r shared deploy/static/
+      - name: Install Angular dependencies
+        working-directory: ./angular-app
+        run: yarn install
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/main'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./deploy/static
-        publish_branch: gh-pages
+      - name: Build Angular app
+        working-directory: ./angular-app
+        run: yarn build
+
+      - name: Prepare deployment
+        run: |
+          mkdir -p deploy/static
+          # Copy framework builds to root-level directories
+          cp -r react-app/dist deploy/static/react
+          cp -r vue-app/dist deploy/static/vue
+          cp -r angular-app/dist deploy/static/angular
+          # Copy launcher files to root
+          cp -r nginx/launcher/* deploy/static/
+          cp -r shared deploy/static/
+          # Create .nojekyll to prevent Jekyll processing
+          touch deploy/static/.nojekyll
+          # List the structure for debugging
+          echo "Deployment structure:"
+          find deploy/static -type f -name "*.html" | head -20
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy/static
+          publish_branch: gh-pages

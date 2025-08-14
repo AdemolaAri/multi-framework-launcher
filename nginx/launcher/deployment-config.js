@@ -55,7 +55,7 @@ function getDeploymentConfig() {
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return DEPLOYMENT_CONFIGS.local;
   } else if (hostname.includes('github.io') || hostname.includes('netlify.app')) {
-    return DEPLOYMENT_CONFIGS.hybrid; // or 'static' if no dynamic components
+    return DEPLOYMENT_CONFIGS.static; // Use static config for GitHub Pages
   } else if (hostname.includes('railway.app') || hostname.includes('fly.dev')) {
     return DEPLOYMENT_CONFIGS.docker;
   } else {
