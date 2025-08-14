@@ -2,7 +2,8 @@
   "name": "angular-app",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo \"Using prebuilt dist/ (no build required)\""
   },
   "dependencies": {
     "express": "^4.18.2"
