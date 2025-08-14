@@ -1,5 +1,8 @@
 name: Deploy Static Portfolio
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main ]
@@ -13,6 +16,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        persist-credentials: true
+        fetch-depth: 0
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -45,8 +51,9 @@ jobs:
         cp -r shared deploy/static/
 
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./deploy/static
+        publish_branch: gh-pages
