@@ -56,8 +56,12 @@ jobs:
           cp -r react-app/dist deploy/static/react
           cp -r vue-app/dist deploy/static/vue
           cp -r angular-app/dist deploy/static/angular
+          # Create placeholder directories for Flask and Django
+          mkdir -p deploy/static/flask deploy/static/django
+          echo '<!DOCTYPE html><html><head><title>Flask App</title></head><body><h1>Flask App</h1><p>This would be a server-side Flask application.</p><a href="../">← Back to Launcher</a></body></html>' > deploy/static/flask/index.html
+          echo '<!DOCTYPE html><html><head><title>Django App</title></head><body><h1>Django App</h1><p>This would be a server-side Django application.</p><a href="../">← Back to Launcher</a></body></html>' > deploy/static/django/index.html
           # Copy launcher files to root
-          cp -r nginx/launcher/* deploy/static/
+          cp nginx/launcher/index.html deploy/static/
           cp -r shared deploy/static/
           # Create .nojekyll to prevent Jekyll processing
           touch deploy/static/.nojekyll
