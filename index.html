@@ -249,7 +249,7 @@
 
         <div id="launcher-view">
             <div class="frameworks-grid">
-                <div class="framework-card" onclick="loadFramework('/react/', 'React')">
+                <div class="framework-card" onclick="loadFramework('react/', 'React')">
                     <div class="framework-header">
                         <div class="framework-icon react-icon">⚛️</div>
                         <div class="framework-title">React</div>
@@ -263,7 +263,7 @@
                     </div>
                 </div>
 
-                <div class="framework-card" onclick="loadFramework('/vue/', 'Vue')">
+                <div class="framework-card" onclick="loadFramework('vue/', 'Vue')">
                     <div class="framework-header">
                         <div class="framework-icon vue-icon">🟢</div>
                         <div class="framework-title">Vue</div>
@@ -277,7 +277,7 @@
                     </div>
                 </div>
 
-                <div class="framework-card" onclick="loadFramework('/angular/', 'Angular')">
+                <div class="framework-card" onclick="loadFramework('angular/', 'Angular')">
                     <div class="framework-header">
                         <div class="framework-icon angular-icon">🅰️</div>
                         <div class="framework-title">Angular</div>
@@ -291,7 +291,7 @@
                     </div>
                 </div>
 
-                <div class="framework-card" onclick="loadFramework('/flask/', 'Flask')">
+                <div class="framework-card" onclick="loadFramework('flask/', 'Flask')">
                     <div class="framework-header">
                         <div class="framework-icon flask-icon">🌶️</div>
                         <div class="framework-title">Flask</div>
@@ -305,7 +305,7 @@
                     </div>
                 </div>
 
-                <div class="framework-card" onclick="loadFramework('/django/', 'Django')">
+                <div class="framework-card" onclick="loadFramework('django/', 'Django')">
                     <div class="framework-header">
                         <div class="framework-icon django-icon">🎯</div>
                         <div class="framework-title">Django</div>
@@ -333,15 +333,11 @@
         </div>
     </div>
 
-    <script src="deployment-config.js"></script>
+
     <script>
         let currentFramework = null;
 
         function loadFramework(path, name) {
-            // Use configured URL instead of relative path
-            const config = window.PORTFOLIO_CONFIG || {};
-            const frameworkKey = name.toLowerCase();
-            const actualPath = config[frameworkKey] || path;
             const launcherView = document.getElementById('launcher-view');
             const frameworkView = document.getElementById('framework-view');
             const iframe = document.getElementById('framework-iframe');
@@ -360,8 +356,11 @@
             frameworkView.classList.add('fade-in');
             
             // Load the framework
-            iframe.src = actualPath;
-            currentFramework = { path: actualPath, name };
+            iframe.src = path;
+            currentFramework = { path, name };
+
+            // Add to browser history
+            history.pushState({ framework: name, path: path }, `${name} Portfolio`, `#${name.toLowerCase()}`);
 
             // Hide loading after iframe loads
             iframe.onload = function() {
@@ -403,50 +402,17 @@
             }
         });
 
-        // Add state to history when loading framework
-        function loadFramework(path, name) {
-            const launcherView = document.getElementById('launcher-view');
-            const frameworkView = document.getElementById('framework-view');
-            const iframe = document.getElementById('framework-iframe');
-            const frameworkName = document.getElementById('current-framework-name');
-            const loading = document.getElementById('loading');
 
-            // Show loading state
-            loading.classList.add('show');
-            
-            // Update framework name
-            frameworkName.textContent = `${name} Portfolio`;
-            
-            // Hide launcher and show framework view
-            launcherView.style.display = 'none';
-            frameworkView.style.display = 'block';
-            frameworkView.classList.add('fade-in');
-            
-            // Load the framework
-            iframe.src = path;
-            currentFramework = { path, name };
-
-            // Add to browser history
-            history.pushState({ framework: name, path: path }, `${name} Portfolio`, `#${name.toLowerCase()}`);
-
-            // Hide loading after iframe loads
-            iframe.onload = function() {
-                loading.classList.remove('show');
-            };
-
-            // Smooth scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
 
         // Initialize with React if hash is present
         window.addEventListener('load', function() {
             const hash = window.location.hash.substring(1);
             const frameworks = {
-                'react': { path: '/react/', name: 'React' },
-                'vue': { path: '/vue/', name: 'Vue' },
-                'angular': { path: '/angular/', name: 'Angular' },
-                'flask': { path: '/flask/', name: 'Flask' },
-                'django': { path: '/django/', name: 'Django' }
+                'react': { path: 'react/', name: 'React' },
+                'vue': { path: 'vue/', name: 'Vue' },
+                'angular': { path: 'angular/', name: 'Angular' },
+                'flask': { path: 'flask/', name: 'Flask' },
+                'django': { path: 'django/', name: 'Django' }
             };
 
             if (hash && frameworks[hash]) {
