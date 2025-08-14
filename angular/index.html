@@ -1,0 +1,495 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Ade Ari - Angular Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .portfolio-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .name {
+            font-size: 2.5em;
+            margin: 0;
+            color: #333;
+        }
+        
+        .title {
+            font-size: 1.2em;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        .bio {
+            line-height: 1.6;
+            color: #555;
+            margin: 20px 0;
+        }
+        
+        .game-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .game-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .game-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .typing-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .text-to-type {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .typing-input {
+            width: 100%;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .typing-input:focus {
+            border-color: #667eea;
+        }
+        
+        .typing-input.correct {
+            border-color: #28a745;
+        }
+        
+        .typing-input.incorrect {
+            border-color: #dc3545;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .results.hidden {
+            display: none;
+        }
+        
+        .skill-connection {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .projects {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .projects h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .project {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .project h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .project p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .resume-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        
+        .resume-link:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="portfolio-header">
+        <img id="avatar" class="avatar" src="/shared/assets/avatar.jpg" alt="Profile Picture"/>
+        <h1 id="name" class="name">Loading...</h1>
+        <p id="title" class="title">Loading...</p>
+        <p id="bio" class="bio">Loading...</p>
+        <a id="resume-link" class="resume-link" href="#" target="_blank">View Resume</a>
+    </div>
+
+    <div class="game-section">
+        <h2 id="game-title" class="game-title">Code Typer</h2>
+        <p id="game-description" class="game-description">Loading...</p>
+        
+        <div class="typing-area">
+            <div id="text-to-type" class="text-to-type">Click "Start New Test" to begin!</div>
+            <input id="typing-input" class="typing-input" type="text" placeholder="Type the text above..." disabled/>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div id="wpm" class="stat-value">0</div>
+                <div class="stat-label">WPM</div>
+            </div>
+            <div class="stat">
+                <div id="accuracy" class="stat-value">100%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat">
+                <div id="time" class="stat-value">0</div>
+                <div class="stat-label">Time (s)</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn" class="btn">Start New Test</button>
+            <button id="reset-btn" class="btn" disabled>Reset</button>
+        </div>
+        
+        <div id="results" class="results hidden">
+            <h3>Test Complete!</h3>
+            <p id="results-text"></p>
+            <div id="skill-connection" class="skill-connection"></div>
+        </div>
+    </div>
+
+    <div class="projects">
+        <h2>Projects</h2>
+        <div id="projects-list">Loading...</div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            isActive: false,
+            startTime: null,
+            currentText: '',
+            currentInput: '',
+            errors: 0,
+            totalChars: 0,
+            timer: null
+        };
+
+        // Tech-focused typing texts
+        const typingTexts = [
+            "const handleAsync = async (data) => { try { const result = await processData(data); return result; } catch (error) { console.error(error); } };",
+            "function debounce(func, wait) { let timeout; return function executedFunction(...args) { const later = () => { clearTimeout(timeout); func(...args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); }; }",
+            "Angular components use TypeScript decorators to define metadata. The @Component decorator specifies the selector, template, and styles for the component.",
+            "Reactive programming with RxJS observables enables powerful data flow management in Angular applications through operators like map, filter, and switchMap.",
+            "Test-driven development improves code quality by writing tests first, then implementing the minimum code needed to pass those tests.",
+            "Microservices architecture promotes scalability and maintainability by decomposing applications into small, independent services.",
+            "Docker containers provide consistent environments across development, testing, and production deployments.",
+            "GraphQL APIs offer flexible data fetching with strongly typed schemas and efficient query resolution.",
+            "Continuous integration and deployment pipelines automate testing and deployment processes for reliable software delivery.",
+            "Clean code principles emphasize readability, simplicity, and maintainability over clever optimizations."
+        ];
+
+        // DOM elements
+        const elements = {
+            textToType: document.getElementById('text-to-type'),
+            typingInput: document.getElementById('typing-input'),
+            startBtn: document.getElementById('start-btn'),
+            resetBtn: document.getElementById('reset-btn'),
+            wpmDisplay: document.getElementById('wpm'),
+            accuracyDisplay: document.getElementById('accuracy'),
+            timeDisplay: document.getElementById('time'),
+            results: document.getElementById('results'),
+            resultsText: document.getElementById('results-text'),
+            skillConnection: document.getElementById('skill-connection')
+        };
+
+        // Load portfolio content
+        async function loadContent() {
+            try {
+                const response = await fetch('/shared/content.json');
+                const content = await response.json();
+                
+                document.getElementById('name').textContent = content.name;
+                document.getElementById('title').textContent = content.title;
+                document.getElementById('bio').textContent = content.bio;
+                document.getElementById('resume-link').href = content.resume;
+                
+                const gameInfo = content.games.angular;
+                document.getElementById('game-title').textContent = gameInfo.title;
+                document.getElementById('game-description').textContent = gameInfo.description;
+                
+                // Load projects
+                const projectsList = document.getElementById('projects-list');
+                projectsList.innerHTML = content.projects.map(project => `
+                    <div class="project">
+                        <h3>${project.title}</h3>
+                        <p>${project.desc}</p>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Failed to load content:', error);
+            }
+        }
+
+        // Start new typing test
+        function startTest() {
+            gameState.isActive = true;
+            gameState.startTime = Date.now();
+            gameState.currentText = typingTexts[Math.floor(Math.random() * typingTexts.length)];
+            gameState.currentInput = '';
+            gameState.errors = 0;
+            gameState.totalChars = 0;
+            
+            elements.textToType.textContent = gameState.currentText;
+            elements.typingInput.value = '';
+            elements.typingInput.disabled = false;
+            elements.typingInput.focus();
+            elements.startBtn.disabled = true;
+            elements.resetBtn.disabled = false;
+            elements.results.classList.add('hidden');
+            
+            // Start timer
+            gameState.timer = setInterval(updateStats, 100);
+        }
+
+        // Reset test
+        function resetTest() {
+            gameState.isActive = false;
+            gameState.startTime = null;
+            gameState.currentText = '';
+            gameState.currentInput = '';
+            gameState.errors = 0;
+            gameState.totalChars = 0;
+            
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+                gameState.timer = null;
+            }
+            
+            elements.textToType.textContent = 'Click "Start New Test" to begin!';
+            elements.typingInput.value = '';
+            elements.typingInput.disabled = true;
+            elements.typingInput.className = 'typing-input';
+            elements.startBtn.disabled = false;
+            elements.resetBtn.disabled = true;
+            elements.results.classList.add('hidden');
+            
+            // Reset stats display
+            elements.wpmDisplay.textContent = '0';
+            elements.accuracyDisplay.textContent = '100%';
+            elements.timeDisplay.textContent = '0';
+        }
+
+        // Update statistics
+        function updateStats() {
+            if (!gameState.isActive || !gameState.startTime) return;
+            
+            const elapsed = (Date.now() - gameState.startTime) / 1000;
+            const wordsTyped = gameState.currentInput.trim().split(' ').length;
+            const wpm = elapsed > 0 ? Math.round((wordsTyped / elapsed) * 60) : 0;
+            const accuracy = gameState.totalChars > 0 ? Math.round(((gameState.totalChars - gameState.errors) / gameState.totalChars) * 100) : 100;
+            
+            elements.wpmDisplay.textContent = wpm;
+            elements.accuracyDisplay.textContent = accuracy + '%';
+            elements.timeDisplay.textContent = Math.round(elapsed);
+        }
+
+        // Handle typing input
+        function handleInput(event) {
+            if (!gameState.isActive) return;
+            
+            const input = event.target.value;
+            gameState.currentInput = input;
+            gameState.totalChars = input.length;
+            
+            // Count errors
+            gameState.errors = 0;
+            for (let i = 0; i < input.length; i++) {
+                if (i >= gameState.currentText.length || input[i] !== gameState.currentText[i]) {
+                    gameState.errors++;
+                }
+            }
+            
+            // Update input styling
+            if (input === gameState.currentText) {
+                elements.typingInput.className = 'typing-input correct';
+                completeTest();
+            } else if (gameState.currentText.startsWith(input)) {
+                elements.typingInput.className = 'typing-input';
+            } else {
+                elements.typingInput.className = 'typing-input incorrect';
+            }
+            
+            updateStats();
+        }
+
+        // Complete the test
+        function completeTest() {
+            gameState.isActive = false;
+            clearInterval(gameState.timer);
+            
+            const elapsed = (Date.now() - gameState.startTime) / 1000;
+            const wordsTyped = gameState.currentText.trim().split(' ').length;
+            const wpm = Math.round((wordsTyped / elapsed) * 60);
+            const accuracy = Math.round(((gameState.totalChars - gameState.errors) / gameState.totalChars) * 100);
+            
+            elements.typingInput.disabled = true;
+            elements.startBtn.disabled = false;
+            elements.resetBtn.disabled = true;
+            
+            // Show results
+            let message = '';
+            let skillMessage = '';
+            
+            if (wpm >= 80 && accuracy >= 95) {
+                message = `Outstanding! ${wpm} WPM with ${accuracy}% accuracy. Your typing speed reflects the efficiency and precision that makes for exceptional code quality.`;
+                skillMessage = 'This level of typing proficiency demonstrates the muscle memory and technical fluency that enables rapid prototyping and efficient debugging sessions.';
+            } else if (wpm >= 60 && accuracy >= 90) {
+                message = `Great job! ${wpm} WPM with ${accuracy}% accuracy. Your solid typing skills support productive coding sessions and effective technical communication.`;
+                skillMessage = 'Good typing speed is essential for maintaining flow state during development and quickly capturing ideas during brainstorming sessions.';
+            } else if (wpm >= 40 && accuracy >= 85) {
+                message = `Good work! ${wpm} WPM with ${accuracy}% accuracy. Your typing skills provide a solid foundation for development work.`;
+                skillMessage = 'Consistent typing ability helps maintain focus on problem-solving rather than getting distracted by input mechanics.';
+            } else {
+                message = `${wpm} WPM with ${accuracy}% accuracy. Keep practicing! Like learning any programming language, typing speed improves with consistent practice.`;
+                skillMessage = 'Just as we refactor code for better performance, improving typing speed enhances overall development efficiency and reduces cognitive load.';
+            }
+            
+            elements.resultsText.textContent = message;
+            elements.skillConnection.textContent = skillMessage;
+            elements.results.classList.remove('hidden');
+        }
+
+        // Event listeners
+        elements.startBtn.addEventListener('click', startTest);
+        elements.resetBtn.addEventListener('click', resetTest);
+        elements.typingInput.addEventListener('input', handleInput);
+
+        // Prevent paste
+        elements.typingInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+        });
+
+        // Load content on page load
+        loadContent();
+    </script>
+</body>
+</html>
