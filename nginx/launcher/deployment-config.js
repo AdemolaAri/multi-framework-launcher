@@ -2,42 +2,42 @@
 const DEPLOYMENT_CONFIGS = {
   // Local development (Docker)
   local: {
-    react: '/react/',
-    vue: '/vue/',
-    angular: '/angular/',
-    flask: '/flask/',
-    django: '/django/',
-    shared: '/shared/'
+    react: 'react/',
+    vue: 'vue/',
+    angular: 'angular/',
+    flask: 'flask/',
+    django: 'django/',
+    shared: 'shared/'
   },
   
   // Hybrid deployment (static on GitHub Pages, dynamic on Render)
   hybrid: {
-    react: '/react/',  // Served from same static host
-    vue: '/vue/',      // Served from same static host
-    angular: '/angular/', // Served from same static host
+    react: 'react/',  // Served from same static host
+    vue: 'vue/',      // Served from same static host
+    angular: 'angular/', // Served from same static host
     flask: 'https://your-portfolio-flask.onrender.com/',
     django: 'https://your-portfolio-django.onrender.com/',
-    shared: '/shared/' // Served from same static host
+    shared: 'shared/' // Served from same static host
   },
   
   // All static (GitHub Pages/Netlify)
   static: {
-    react: '/react/',
-    vue: '/vue/',
-    angular: '/angular/',
-    flask: '/flask/',  // Static version
-    django: '/django/', // Static version
-    shared: '/shared/'
+    react: 'react/',
+    vue: 'vue/',
+    angular: 'angular/',
+    flask: 'flask/',  // Static version
+    django: 'django/', // Static version
+    shared: 'shared/'
   },
   
   // Full Docker deployment (Railway/Render)
   docker: {
-    react: '/react/',
-    vue: '/vue/',
-    angular: '/angular/',
-    flask: '/flask/',
-    django: '/django/',
-    shared: '/shared/'
+    react: 'react/',
+    vue: 'vue/',
+    angular: 'angular/',
+    flask: 'flask/',
+    django: 'django/',
+    shared: 'shared/'
   }
 };
 
