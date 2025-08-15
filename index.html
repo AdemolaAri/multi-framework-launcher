@@ -369,13 +369,13 @@
     <div class="container">
         <header>
             <div class="profile-header">
-                <img src="/shared/assets/avatar.jpg" alt="Ademola Arigbabuwo" class="profile-avatar">
+                <img id="profile-avatar" src="/shared/assets/pic101.png" alt="Ademola Arigbabuwo" class="profile-avatar">
                 <div class="profile-info">
                     <h1>Ademola Arigbabuwo</h1>
                     <p class="title">Full-Stack Engineer</p>
                     <p class="bio">Software engineer with experience in Angular, React, Go, Python, backend services,
                         and building config-driven UIs. Passionate about product-driven engineering and mentoring.</p>
-                    <a href="/shared/assets/resume.pdf" class="resume-link" target="_blank">📄 View Resume</a>
+                    <a href="https://1drv.ms/b/c/f3ce545287e9403e/EXEnwuZVMyhBrvAbbtHWKJYBZLZYv6wEkogOPxGjRgo9Qw?e=8opz3i" class="resume-link" target="_blank">📄 View Resume</a>
                 </div>
             </div>
         </header>
@@ -589,8 +589,27 @@
 
 
 
+        // Load content from JSON
+        async function loadContent() {
+            try {
+                const response = await fetch('/shared/content.json');
+                const content = await response.json();
+                
+                // Update avatar if available
+                const avatarImg = document.getElementById('profile-avatar');
+                if (avatarImg && content.avatar) {
+                    avatarImg.src = content.avatar;
+                }
+            } catch (error) {
+                console.error('Failed to load content:', error);
+            }
+        }
+
         // Initialize with React if hash is present
         window.addEventListener('load', function () {
+            // Load dynamic content
+            loadContent();
+            
             // Initialize motivational quote
             updateMotivationalQuote();
 
