@@ -9,7 +9,7 @@
     "test:production": "./production-test.sh"
   },
   "keywords": ["portfolio", "react", "vue", "angular", "flask", "django"],
-  "author": "Ade Ari",
+  "author": "Ademola Arigbabuwo",
   "license": "MIT",
   "devDependencies": {
     "surge": "^0.23.1",
