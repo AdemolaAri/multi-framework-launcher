@@ -317,24 +317,41 @@
         // Load portfolio content
         async function loadContent() {
             try {
-                const response = await fetch('/shared/content.json');
+                const response = await fetch('/shared/content.json?t=' + Date.now());
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const content = await response.json();
                 
-                const gameInfo = content.games.angular;
-                document.getElementById('game-title').textContent = gameInfo.title;
-                document.getElementById('game-description').textContent = gameInfo.description;
+                // Load game info
+                if (content.games && content.games.angular) {
+                    const gameInfo = content.games.angular;
+                    document.getElementById('game-title').textContent = gameInfo.title;
+                    document.getElementById('game-description').textContent = gameInfo.description;
+                } else {
+                    document.getElementById('game-title').textContent = 'Code Typer';
+                    document.getElementById('game-description').textContent = 'Demonstrate your typing speed with tech terms and code snippets.';
+                }
                 
                 // Load projects
                 const projectsList = document.getElementById('projects-list');
-                projectsList.innerHTML = content.projects.map(project => `
-                    <div class="project">
-                        <h3>${project.title}</h3>
-                        <p>${project.desc}</p>
-                    </div>
-                `).join('');
+                if (content.projects && content.projects.length > 0) {
+                    projectsList.innerHTML = content.projects.map(project => `
+                        <div class="project">
+                            <h3>${project.title}</h3>
+                            <p>${project.desc}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    projectsList.innerHTML = '<p>No projects found.</p>';
+                }
                 
             } catch (error) {
                 console.error('Failed to load content:', error);
+                document.getElementById('projects-list').innerHTML = '<p>Error loading projects. Please try refreshing the page.</p>';
+                document.getElementById('game-description').textContent = 'Error loading game description.';
             }
         }
 
@@ -478,7 +495,12 @@
         });
 
         // Load content on page load
-        loadContent();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadContent);
+        } else {
+            // DOM is already loaded
+            setTimeout(loadContent, 100);
+        }
     </script>
 </body>
 </html>
