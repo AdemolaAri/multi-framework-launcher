@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Ademola Arigbabuwo - Portfolio Launcher</title>
     <style>
         * {
@@ -16,6 +17,8 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
+            padding-bottom: 80px;
+            /* Space for sticky footer */
         }
 
         .container {
@@ -31,31 +34,58 @@
             padding: 20px 0;
         }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        header p {
-            font-size: 1.2rem;
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-info .title {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .profile-info .bio {
+            font-size: 1.1rem;
             opacity: 0.9;
             margin-bottom: 20px;
+            max-width: 600px;
+            line-height: 1.5;
         }
 
         .resume-link {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 25px;
             text-decoration: none;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            font-weight: 500;
         }
 
         .resume-link:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
 
@@ -70,7 +100,7 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -79,7 +109,7 @@
 
         .framework-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .framework-card::before {
@@ -111,11 +141,26 @@
             font-size: 1.2rem;
         }
 
-        .react-icon { background: #61dafb; color: #000; }
-        .vue-icon { background: #4fc08d; }
-        .angular-icon { background: #dd0031; }
-        .flask-icon { background: #000; }
-        .django-icon { background: #092e20; }
+        .react-icon {
+            background: #61dafb;
+            color: #000;
+        }
+
+        .vue-icon {
+            background: #4fc08d;
+        }
+
+        .angular-icon {
+            background: #dd0031;
+        }
+
+        .flask-icon {
+            background: #000;
+        }
+
+        .django-icon {
+            background: #092e20;
+        }
 
         .framework-title {
             font-size: 1.4rem;
@@ -153,7 +198,7 @@
         .current-view {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             margin-top: 20px;
         }
@@ -173,7 +218,7 @@
         }
 
         .back-button {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             padding: 8px 16px;
@@ -183,7 +228,7 @@
         }
 
         .back-button:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         iframe {
@@ -211,8 +256,25 @@
                 padding: 15px;
             }
 
-            header h1 {
+            .profile-header {
+                gap: 15px;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .profile-info h1 {
                 font-size: 2rem;
+            }
+
+            .profile-info .title {
+                font-size: 1.2rem;
+            }
+
+            .profile-info .bio {
+                font-size: 1rem;
             }
 
             .frameworks-grid {
@@ -234,17 +296,88 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sticky Footer */
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .trademark {
+            font-size: 0.8rem;
+            vertical-align: super;
+        }
+
+        .motivational-quote {
+            font-style: italic;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .motivational-quote {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
-            <h1>Ademola Arigbabuwo</h1>
-            <p>Full-Stack Engineer Portfolio</p>
-            <a href="/shared/assets/resume.pdf" class="resume-link" target="_blank">📄 View Resume</a>
+            <div class="profile-header">
+                <img src="/shared/assets/avatar.jpg" alt="Ademola Arigbabuwo" class="profile-avatar">
+                <div class="profile-info">
+                    <h1>Ademola Arigbabuwo</h1>
+                    <p class="title">Full-Stack Engineer</p>
+                    <p class="bio">Software engineer with experience in Angular, React, Go, Python, backend services,
+                        and building config-driven UIs. Passionate about product-driven engineering and mentoring.</p>
+                    <a href="/shared/assets/resume.pdf" class="resume-link" target="_blank">📄 View Resume</a>
+                </div>
+            </div>
         </header>
 
         <div id="launcher-view">
@@ -256,10 +389,12 @@
                     </div>
                     <div class="game-info">
                         <div class="game-title">Memory Challenge</div>
-                        <div class="game-description">Test your memory skills with this card matching game - showcasing the attention to detail that drives my engineering approach.</div>
+                        <div class="game-description">Test your memory skills with this card matching game - showcasing
+                            the attention to detail that drives my engineering approach.</div>
                     </div>
                     <div class="skill-connection">
-                        Just like debugging complex systems, this game requires focus, pattern recognition, and methodical thinking.
+                        Just like debugging complex systems, this game requires focus, pattern recognition, and
+                        methodical thinking.
                     </div>
                 </div>
 
@@ -270,10 +405,12 @@
                     </div>
                     <div class="game-info">
                         <div class="game-title">Puzzle Master</div>
-                        <div class="game-description">Solve the sliding puzzle by rearranging pieces - reflecting my problem-solving methodology in software architecture.</div>
+                        <div class="game-description">Solve the sliding puzzle by rearranging pieces - reflecting my
+                            problem-solving methodology in software architecture.</div>
                     </div>
                     <div class="skill-connection">
-                        Breaking down complex problems into manageable pieces is key to both puzzle-solving and system design.
+                        Breaking down complex problems into manageable pieces is key to both puzzle-solving and system
+                        design.
                     </div>
                 </div>
 
@@ -284,7 +421,8 @@
                     </div>
                     <div class="game-info">
                         <div class="game-title">Code Typer</div>
-                        <div class="game-description">Demonstrate your typing speed with tech terms and code snippets - highlighting the technical proficiency behind clean code.</div>
+                        <div class="game-description">Demonstrate your typing speed with tech terms and code snippets -
+                            highlighting the technical proficiency behind clean code.</div>
                     </div>
                     <div class="skill-connection">
                         Fast, accurate coding comes from muscle memory and deep familiarity with programming concepts.
@@ -298,10 +436,12 @@
                     </div>
                     <div class="game-info">
                         <div class="game-title">Tech Trivia</div>
-                        <div class="game-description">Challenge your knowledge of technologies and concepts - showcasing the breadth of my technical expertise.</div>
+                        <div class="game-description">Challenge your knowledge of technologies and concepts - showcasing
+                            the breadth of my technical expertise.</div>
                     </div>
                     <div class="skill-connection">
-                        Continuous learning and staying current with technology trends is essential for effective engineering leadership.
+                        Continuous learning and staying current with technology trends is essential for effective
+                        engineering leadership.
                     </div>
                 </div>
 
@@ -312,10 +452,12 @@
                     </div>
                     <div class="game-info">
                         <div class="game-title">Word Connect</div>
-                        <div class="game-description">Associate technical concepts and terms - demonstrating the communication skills vital for mentoring and collaboration.</div>
+                        <div class="game-description">Associate technical concepts and terms - demonstrating the
+                            communication skills vital for mentoring and collaboration.</div>
                     </div>
                     <div class="skill-connection">
-                        Clear technical communication and the ability to connect concepts across domains enables effective team collaboration.
+                        Clear technical communication and the ability to connect concepts across domains enables
+                        effective team collaboration.
                     </div>
                 </div>
             </div>
@@ -333,8 +475,51 @@
         </div>
     </div>
 
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span>Ademola Arigbabuwo</span>
+                <span class="trademark">™</span>
+            </div>
+            <div class="motivational-quote" id="motivational-quote">
+                Loading inspiration...
+            </div>
+        </div>
+    </footer>
 
     <script>
+        // Motivational quotes
+        const motivationalQuotes = [
+            "Code is poetry written in logic.",
+            "Every bug is a learning opportunity in disguise.",
+            "Great software is built one commit at a time.",
+            "Innovation happens when curiosity meets persistence.",
+            "Clean code is not written by following a set of rules, but by caring.",
+            "The best error message is the one that never shows up.",
+            "Debugging is like being a detective in a crime movie where you are also the murderer.",
+            "First, solve the problem. Then, write the code.",
+            "Code never lies, comments sometimes do.",
+            "The most important skill for a programmer is the ability to effectively communicate with humans.",
+            "Simplicity is the ultimate sophistication in software design.",
+            "A good programmer is someone who always looks both ways before crossing a one-way street.",
+            "Programming isn't about what you know; it's about what you can figure out.",
+            "The best way to get a project done faster is to start sooner.",
+            "Code is like humor. When you have to explain it, it's bad."
+        ];
+
+        function getRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+            return motivationalQuotes[randomIndex];
+        }
+
+        function updateMotivationalQuote() {
+            const quoteElement = document.getElementById('motivational-quote');
+            if (quoteElement) {
+                quoteElement.textContent = getRandomQuote();
+            }
+        }
+
         let currentFramework = null;
 
         function loadFramework(path, name) {
@@ -346,15 +531,15 @@
 
             // Show loading state
             loading.classList.add('show');
-            
+
             // Update framework name
             frameworkName.textContent = `${name} Portfolio`;
-            
+
             // Hide launcher and show framework view
             launcherView.style.display = 'none';
             frameworkView.style.display = 'block';
             frameworkView.classList.add('fade-in');
-            
+
             // Load the framework
             iframe.src = path;
             currentFramework = { path, name };
@@ -363,12 +548,12 @@
             history.pushState({ framework: name, path: path }, `${name} Portfolio`, `#${name.toLowerCase()}`);
 
             // Hide loading after iframe loads
-            iframe.onload = function() {
+            iframe.onload = function () {
                 loading.classList.remove('show');
             };
 
             // Handle iframe errors
-            iframe.onerror = function() {
+            iframe.onerror = function () {
                 loading.innerHTML = `<p style="color: #dc3545;">Failed to load ${name} framework. Please try again.</p>`;
             };
 
@@ -383,12 +568,12 @@
 
             // Clear iframe
             iframe.src = '';
-            
+
             // Show launcher and hide framework view
             frameworkView.style.display = 'none';
             launcherView.style.display = 'block';
             launcherView.classList.add('fade-in');
-            
+
             currentFramework = null;
 
             // Smooth scroll to top
@@ -396,7 +581,7 @@
         }
 
         // Handle browser back button
-        window.addEventListener('popstate', function(event) {
+        window.addEventListener('popstate', function (event) {
             if (currentFramework && !event.state) {
                 showLauncher();
             }
@@ -405,7 +590,10 @@
 
 
         // Initialize with React if hash is present
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
+            // Initialize motivational quote
+            updateMotivationalQuote();
+
             const hash = window.location.hash.substring(1);
             const frameworks = {
                 'react': { path: 'react/', name: 'React' },
@@ -419,6 +607,10 @@
                 loadFramework(frameworks[hash].path, frameworks[hash].name);
             }
         });
+
+        // Update quote every 30 seconds
+        setInterval(updateMotivationalQuote, 30000);
     </script>
 </body>
+
 </html>

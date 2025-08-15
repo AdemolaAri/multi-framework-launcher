@@ -231,13 +231,7 @@
     </style>
 </head>
 <body>
-    <div class="portfolio-header">
-        <img id="avatar" class="avatar" src="/shared/assets/avatar.jpg" alt="Profile Picture"/>
-        <h1 id="name" class="name">Loading...</h1>
-        <p id="title" class="title">Loading...</p>
-        <p id="bio" class="bio">Loading...</p>
-        <a id="resume-link" class="resume-link" href="#" target="_blank">View Resume</a>
-    </div>
+
 
     <div class="game-section">
         <h2 id="game-title" class="game-title">Code Typer</h2>
@@ -325,11 +319,6 @@
             try {
                 const response = await fetch('/shared/content.json');
                 const content = await response.json();
-                
-                document.getElementById('name').textContent = content.name;
-                document.getElementById('title').textContent = content.title;
-                document.getElementById('bio').textContent = content.bio;
-                document.getElementById('resume-link').href = content.resume;
                 
                 const gameInfo = content.games.angular;
                 document.getElementById('game-title').textContent = gameInfo.title;

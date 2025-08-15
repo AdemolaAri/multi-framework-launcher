@@ -3,18 +3,11 @@
     <header>
       <h1>{{ content.name }} — {{ content.title }}</h1>
       <nav>
-        <a href="/">← Back to Launcher</a>
         <a :href="content.resume" target="_blank">View Resume</a>
       </nav>
     </header>
     
     <main>
-      <section class="profile-section">
-        <img src="/shared/assets/avatar.jpg" width="120" alt="Profile Avatar"/>
-        <p>{{ content.bio }}</p>
-        <a :href="content.resume" target="_blank" class="resume-link">View Resume</a>
-      </section>
-
       <section>
         <h2>{{ content.games.vue.title }}</h2>
         <p>{{ content.games.vue.description }}</p>
